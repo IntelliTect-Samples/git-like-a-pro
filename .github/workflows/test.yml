@@ -1,0 +1,30 @@
+# Runs on the GitHub mirror of this repo (Bitbucket stays the home repo).
+name: test
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint
+        if: runner.os == 'Linux'
+        run: bash tests/lint.sh
+      - name: Tests (default bash)
+        run: bash tests/run-all.sh
+      - name: Tests (macOS stock bash 3.2, inner calls too)
+        if: runner.os == 'macOS'
+        run: /bin/bash tests/run-all.sh   # run-all.sh starts every inner call with "$BASH", so they're 3.2 too
+      - name: Windows launcher
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: |
+          call lab.cmd version || exit /b 1
+          call lab.cmd list || exit /b 1

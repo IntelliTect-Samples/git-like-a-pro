@@ -1,0 +1,64 @@
+#!/usr/bin/env bash
+# lab - builds the practice repos for the Git like a pro course.
+# Runs on macOS (bash 3.2), Linux and Git Bash on Windows. Run "bash lab help".
+set -eu
+unset CDPATH
+
+KIT="$(cd -P "$(dirname "$0")" && pwd)"
+. "$KIT/lib/common.sh"
+
+usage() {
+  cat <<EOF
+Usage: bash lab <command>
+
+  bash lab list                    every lab and Try-it, in course order
+  bash lab <lab>                   build a lab from scratch (e.g. bash lab reviewable)
+  bash lab <lab> --step <n>        build the lab as it looks at the start of step n
+  bash lab <lab> --room <n>        rebuild one room of a lab that has rooms (escape-room)
+  bash lab <lab> --check           show which of the lab's goals you've met
+  bash lab hint <lab> [<step>]     show the hint for a step
+  bash lab try <name>              build a Try-it repo (e.g. bash lab try peek-inside)
+  bash lab play                    build (or reset) the playground repo
+  bash lab open <lab>              open a lab's folder in VS Code
+  bash lab doctor                  check your tools before the course
+  bash lab version                 show the kit version
+
+Labs are built under: $(native_path "$(lab_root)")
+Set LAB_HOME to use a different folder.
+EOF
+}
+
+cmd="${1:-help}"
+[ $# -gt 0 ] && shift
+
+case "$cmd" in
+  help|-h|--help) usage ;;
+  version|--version) echo "git-like-a-pro kit $KIT_VERSION" ;;
+  list) list_items ;;
+  doctor) . "$KIT/lib/doctor.sh"; run_doctor ;;
+  play) require_git; build_try playground ;;
+  try)
+    [ $# -ge 1 ] || die 1 "Which Try-it? Run: bash lab list"
+    require_git; build_try "$1" ;;
+  hint)
+    [ $# -ge 1 ] || die 1 "Which lab? Example: bash lab hint reviewable 2"
+    show_hint "$1" "${2:-}" ;;
+  open)
+    [ $# -ge 1 ] || die 1 "Which lab? Example: bash lab open reviewable"
+    open_workspace "$1" ;;
+  *)
+    require_git
+    slug="$cmd"
+    [ -f "$KIT/labs/$slug/setup.sh" ] || die 1 "No lab called '$slug'. Run: bash lab list"
+    case "${1:-}" in
+      "") build_lab "$slug" 1 ;;
+      --step)
+        [ $# -ge 2 ] || die 1 "Which step? Example: bash lab $slug --step 2"
+        build_lab "$slug" "$2" ;;
+      --room)
+        [ $# -ge 2 ] || die 1 "Which room? Example: bash lab $slug --room 3"
+        build_one_room "$slug" "$2" ;;
+      --check) check_lab "$slug" ;;
+      *) die 1 "Unknown option '$1'. Run: bash lab help" ;;
+    esac ;;
+esac

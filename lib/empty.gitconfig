@@ -1,0 +1,2 @@
+# Intentionally empty: lab scripts build their repos with this as the global config,
+# so your own Git settings cannot change the starting state.

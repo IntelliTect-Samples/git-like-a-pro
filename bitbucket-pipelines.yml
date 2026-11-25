@@ -1,0 +1,11 @@
+# Linux tests on every push. macOS and Windows run on the GitHub mirror (.github/workflows/test.yml).
+image: debian:trixie-slim
+
+pipelines:
+  default:
+    - step:
+        name: Lint and test
+        script:
+          - apt-get update -qq && apt-get install -y -qq git shellcheck > /dev/null
+          - bash tests/lint.sh
+          - bash tests/run-all.sh
