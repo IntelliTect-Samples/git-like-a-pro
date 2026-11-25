@@ -2,6 +2,8 @@
 
 About 15 minutes. Section: Finding when and why things changed.
 
+On Windows, work in **Git Bash** (in VS Code: Terminal > New Terminal > Git Bash). The commands below assume it; in PowerShell, `bash` can start WSL's Linux instead, and some commands fail there.
+
 `main` has 300 commits. The `v1.0` tag (commit 100) passed the tests. Today `bash test.sh` fails: tax on 999 cents is no longer rounded to the nearest cent. Find the commit that broke it, without reading 200 commits.
 
 ## Set up
@@ -66,7 +68,7 @@ bash test.sh
 - `git bisect log` (during a bisect) shows your answers so far; `git bisect replay` can redo them.
 - What if some commits can't be tested (they don't build)? Your test script exits 125 for those and `bisect run` skips them. Or mark one by hand: `git bisect skip`.
 - Bisecting something that isn't a bug? `git bisect start --term-old=slow --term-new=fast` lets you use your own words.
-- Faster still: `git log -S "+ 50" --oneline -- src/price.sh` finds when that text disappeared. Bisect is for when you don't know which line to look for.
+- Faster still: on `main`, `git log -S "+ 50" --oneline -- src/price.sh` finds when that text disappeared. Bisect is for when you don't know which line to look for.
 
 ## Debrief
 

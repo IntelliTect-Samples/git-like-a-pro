@@ -2,6 +2,8 @@
 
 About 40 minutes. Section: Undo almost anything.
 
+On Windows, work in **Git Bash** (in VS Code: Terminal > New Terminal > Git Bash). The commands below assume it; in PowerShell, `bash` can start WSL's Linux instead, and some commands fail there.
+
 Six repos, each broken in a different way. Get out of as many rooms as you can. The rooms don't depend on each other: do them in any order, skip one, or come back later.
 
 ## Set up

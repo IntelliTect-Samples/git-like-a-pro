@@ -32,6 +32,11 @@ cmd="${1:-help}"
 [ $# -gt 0 ] && shift
 
 case "$cmd" in
+  help|-h|--help|version|--version|doctor) ;;
+  *) if wsl_on_windows_kit; then echo "PROBLEM  $(wsl_advice)" >&2; exit 2; fi ;;
+esac
+
+case "$cmd" in
   help|-h|--help) usage ;;
   version|--version) echo "git-like-a-pro kit $KIT_VERSION" ;;
   list) list_items ;;

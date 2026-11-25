@@ -2,6 +2,8 @@
 
 About 30 minutes. Section: History cleanup, strategies and structure. Good in pairs: one person is "outside", the other "inside", and only the USB folder passes between you.
 
+On Windows, work in **Git Bash** (in VS Code: Terminal > New Terminal > Git Bash). The commands below assume it; in PowerShell, `bash` can start WSL's Linux instead, and some commands fail there.
+
 Some networks are offline on purpose. Work gets in on removable media, often reviewed on the way. Here:
 
 - `outside/` is the connected repo. Its branch `rates` has three commits: some code, a chart stored in **Git LFS**, and a move of the `vendor/units` **submodule** to a newer version.
@@ -54,7 +56,8 @@ Submodule commands here have `-c protocol.file.allow=always`: Git blocks submodu
 
    ```
    cd ../outside
-   cp -R .git/lfs/objects ../usb/lfs-objects
+   mkdir -p ../usb/lfs-objects
+   cp -R .git/lfs/objects/. ../usb/lfs-objects/
    cd ../inside
    cp -R ../usb/lfs-objects/. .git/lfs/objects/
    git am ../usb/patches/*.patch
@@ -108,7 +111,7 @@ git -C ../outside rev-parse rates
 ## Stretch
 
 - The next trip, with an incremental bundle. Outside, mark what you just sent with `git tag sent-1 rates`, add a commit to `rates`, then bundle only the new part: `git bundle create ../usb/rates-2.bundle sent-1..rates`. Inside, `git bundle verify ../usb/rates-2.bundle` checks that the commit it builds on is already there (it is: `rates-bundle`), then `git fetch ../usb/rates-2.bundle rates:rates-bundle`.
-- A bare repo on the stick is a third way: `git init --bare ../usb/shop.git`, push `rates` to it from outside, fetch from it inside. With `git lfs push` it can carry LFS objects too; it still doesn't carry the library.
+- A bare repo on the stick is a third way: `git init --bare -b main ../usb/shop.git`, then outside `git remote add usb ../usb/shop.git` and `git push usb rates`, and inside fetch from it. Use a named remote: pushing straight to the folder path fails on the LFS file ("missing protocol"), while `git push usb` carries the LFS objects too. It still doesn't carry the library.
 - Which would your reviewers rather read: patches or a bundle? Which keeps `git log` the same on both sides?
 - `git am` keeps the author and the author date, but the committer is whoever applied it. Check with `git log --format=fuller -1 rates`.
 

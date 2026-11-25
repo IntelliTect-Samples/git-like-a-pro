@@ -13,7 +13,7 @@ The folder holds the shared remote `origin.git` and your clone `me`. A teammate 
    git lg --all
    ```
 
-   A merge commit, "Merge branch 'main' of ...", joins your commit and the teammate's.
+   A merge commit, "Merge branch 'main' of ..." (then the practice folder's path), joins your commit and the teammate's.
 
 2. Undo that pull. `ORIG_HEAD` is where `main` was before it:
 

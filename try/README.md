@@ -16,31 +16,41 @@ A small repo with a few commits on `main` and a `feature` branch. Experiment fre
 
 ## How Git really works
 
-### peek-inside (3 min)
+### peek-inside (4 min)
 
 ```
 bash lab try peek-inside
 ```
 
-1. Show the latest commit object:
+1. Look around `.git` first. HEAD names a branch, and the branch is a file holding one commit hash:
+
+   ```
+   cat .git/HEAD
+   cat .git/refs/heads/main
+   ls .git/objects
+   ```
+
+2. Show that commit object:
 
    ```
    git cat-file -p HEAD
    ```
 
-2. Copy the `tree` hash from the output and show that tree:
+3. Copy the `tree` hash from the output and show that tree:
 
    ```
    git cat-file -p <tree-hash>
    ```
 
-3. Find the line for `README.md` and show that blob:
+4. Find the line for `README.md` and show that blob:
 
    ```
    git cat-file -p <blob-hash>
    ```
 
-4. Ask Git what type each object is: `git cat-file -t <hash>`.
+5. Ask Git what type each object is: `git cat-file -t <hash>`.
+
+Look for: the hash in `refs/heads/main` is the one `git log -1` shows, and `ls .git/objects` has a folder named after its first two characters.
 
 Extra: `src` is a tree inside the tree. Show it, then compare `git cat-file -p HEAD~1` with `HEAD`: which hashes changed, and which stayed the same?
 
@@ -323,7 +333,7 @@ The folder holds the shared remote `origin.git` and your clone `me`. A teammate 
    git lg --all
    ```
 
-   A merge commit, "Merge branch 'main' of ...", joins your commit and the teammate's.
+   A merge commit, "Merge branch 'main' of ..." (then the practice folder's path), joins your commit and the teammate's.
 
 2. Undo that pull. `ORIG_HEAD` is where `main` was before it:
 

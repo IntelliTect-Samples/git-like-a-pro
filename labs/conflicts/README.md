@@ -2,6 +2,8 @@
 
 About 25 minutes. Section: Merging vs. rebasing.
 
+On Windows, work in **Git Bash** (in VS Code: Terminal > New Terminal > Git Bash). The commands below assume it; in PowerShell, `bash` can start WSL's Linux instead, and some commands fail there.
+
 A teammate pushed two commits to `main`: tax is now rounded to the nearest cent, and the README says so. Meanwhile two branches were started from the old `main`:
 
 - `loyalty`: 5% off for loyalty members (two commits)
@@ -42,7 +44,7 @@ Git replays the two `loyalty` commits on top of the teammate's work and stops at
 2. Resolve them so **both** changes survive. In `src/price.sh`, members still get 5% off before tax, and tax is still rounded. In `README.md`, keep both sentences.
    - VS Code: open the file and click **Resolve in Merge Editor**, or edit the markers by hand.
    - Command line: edit the file, then delete every `<<<<<<<`, `|||||||`, `=======` and `>>>>>>>` line.
-3. `bash test.sh`, then `git add <file>` and `git rebase --continue`.
+3. `bash test.sh`, then `git add <file>` and `git rebase --continue`. Git may open your editor on the commit message: save and close it (in VS Code, close the tab).
 
 Lost? `git rebase --abort` puts the branch back exactly as it was.
 
@@ -85,7 +87,7 @@ git lg
 ## Stretch
 
 - Rebuild (`bash lab conflicts`) and merge `loyalty` into `main` **without** rebasing first. Same conflicts, but you resolve them once, in the merge commit. Compare `git lg` with your rebased version.
-- During a rebase, `git checkout --ours <file>` takes **main's** version and `--theirs` takes **your** commit's version, the opposite of a merge. Rebuild and try both on `README.md` to see it.
+- During a rebase, `git checkout --ours <file>` takes **main's** version and `--theirs` takes **your** commit's version, the opposite of a merge. Rebuild and try both on `README.md` to see it (resolve `src/price.sh` first: `README.md` conflicts in the second commit).
 - `git log --merges --first-parent main` lists only the features merged into `main`.
 - `rebase --onto`: rebuild, then move only the *second* `loyalty` commit onto `main`, leaving the first behind: `git rebase --onto main loyalty~1 loyalty`. Read it as "take the commits after `loyalty~1`, up to `loyalty`, and replay them onto `main`".
 

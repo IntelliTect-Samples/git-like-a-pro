@@ -174,6 +174,13 @@ expect_code 2 "refuses LAB_HOME=\$HOME" env LAB_HOME="$HOME" "$BASH" "$LAB" revi
 [ "$(git -C "$LAB_HOME/reviewable" rev-list --count main..discounts 2>/dev/null)" = 3 ] && pass "--step 02 means step 2" || fail "--step 02 built the wrong state"
 env LAB_HOME="$TMP_ROOT/doctor-new" "$BASH" "$LAB" doctor >/dev/null 2>&1
 [ ! -e "$TMP_ROOT/doctor-new" ] && pass "doctor creates nothing" || fail "doctor created the workspace folder"
+
+# WSL against a Windows folder: refuse to build, and doctor says why
+if env LAB_TEST_WSL=1 LAB_HOME="$TMP_ROOT/wsl" "$BASH" "$LAB" try playground >"$TMP_ROOT/out" 2>&1; then
+  fail "lab ran under (simulated) WSL against a Windows folder"
+elif grep -q "lab.cmd" "$TMP_ROOT/out" && [ ! -e "$TMP_ROOT/wsl" ]; then pass "WSL against a Windows folder: refuses and says to use lab.cmd or Git Bash"
+else fail "WSL refusal message missing, or it built something"; sed 's/^/      /' "$TMP_ROOT/out"; fi
+env LAB_TEST_WSL=1 "$BASH" "$LAB" doctor 2>&1 | grep -q "PROBLEM.*WSL" && pass "doctor flags WSL against a Windows folder" || fail "doctor didn't flag WSL"
 mkdir -p "$LAB_HOME/.trash-old-1"; echo x > "$LAB_HOME/.trash-old-1/f"
 "$BASH" "$LAB" play >/dev/null 2>&1
 [ ! -e "$LAB_HOME/.trash-old-1" ] && pass "leftover .trash folders are swept" || fail ".trash folder left behind"

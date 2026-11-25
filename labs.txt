@@ -2,7 +2,7 @@
 # kind|slug|section|minutes|tier|goal
 # tier: core = always run; if-time = dropped first when a section runs long
 try|playground|-|-|-|A small repo to experiment in (bash lab play)
-try|peek-inside|How Git really works|3|core|Look inside a commit, its tree and a blob
+try|peek-inside|How Git really works|4|core|Look around .git, then inside a commit, its tree and a blob
 try|detach-and-return|How Git really works|4|core|Detach HEAD, commit there, get back and keep the commit
 try|folder-remote|How Git really works|4|core|Use a folder as a remote: push to it, clone from it
 try|same-blob|How Git really works|2|if-time|Two files with the same content share one blob

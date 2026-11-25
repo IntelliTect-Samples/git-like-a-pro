@@ -2,6 +2,8 @@
 
 About 25 minutes. Section: Rebase workflows with Bitbucket. Works well in pairs: one types, one predicts what Git will say.
 
+On Windows, work in **Git Bash** (in VS Code: Terminal > New Terminal > Git Bash). The commands below assume it; in PowerShell, `bash` can start WSL's Linux instead, and some commands fail there.
+
 Teams that rebase their pull request branches have to force push: a rebase makes new commits, so the branch on the server is no longer part of yours. This lab is about doing that without ever losing someone else's work.
 
 Everything runs locally:
@@ -14,7 +16,8 @@ Everything runs locally:
 
 ```
 bash lab force-push
-cd "<the folder it prints>/me"
+cd "<the folder it prints>"
+cd me
 ```
 
 Start at a later step with `bash lab force-push --step 2` (or 3). Check progress from the kit folder with `bash lab force-push --check`; hints with `bash lab hint force-push <step>`.
@@ -57,7 +60,7 @@ Alex merged something into `main` while your pull request was open. You don't kn
    ```
 
 3. Push with the lease: `git push --force-with-lease`. Rejected as **stale info**: the branch isn't where you last saw it. The lease just saved Alex's commit.
-4. Now the trap. VS Code fetches in the background every few minutes ("autofetch"). Simulate it: `git fetch`. Your `origin/receipt-totals` now includes Alex's commit, so a plain `--force-with-lease` would succeed **and delete it**. Don't. Instead:
+4. Now the trap. Something fetches behind your back: VS Code does every 3 minutes once you turn on autofetch (it's off by default), and so do other tools. Simulate it: `git fetch`. Your `origin/receipt-totals` now includes Alex's commit, so a plain `--force-with-lease` would succeed **and delete it**. Don't. Instead:
 
    ```
    git push --force-with-lease --force-if-includes

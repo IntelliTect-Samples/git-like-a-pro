@@ -12,6 +12,11 @@ run_doctor() {
   echo "System: $(uname -s) $(uname -r)"
   echo "Shell:  bash $BASH_VERSION ($BASH)"
   echo
+  if wsl_on_windows_kit; then
+    echo "Where you're running it"
+    bad "$(wsl_advice)"
+    echo
+  fi
 
   echo "Git"
   if command -v git >/dev/null 2>&1; then

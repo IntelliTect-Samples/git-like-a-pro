@@ -17,14 +17,14 @@ Show one with `bash lab hint escape-room <room>`.
 ## Room 3 - The bad rebase
 
 - After a rebase, `ORIG_HEAD` points at the branch tip from before the rebase.
-- `git reset --hard ORIG_HEAD` while on `menu`. If you've done something else since, use the branch's reflog: `git reflog menu` and look for the entry before `rebase (finish)`.
+- `git reset --hard ORIG_HEAD` while on `menu`. If you've done something else since, use the branch's reflog: `git reflog menu` and look for the entry just below `rebase (finish)` (the list is newest first).
 - Stretch: `git rebase main` again, and this time edit `prices.txt` to keep the coffee price rise **and** the oat milk.
 
 ## Room 4 - The dropped stash
 
 - A stash is a commit. Dropping it removes the name, not the commit.
 - `git fsck --no-reflogs` lists "dangling commit" lines; one of them is your stash. `git show <hash>` to check: it's titled `WIP on main` and its diff has the `Idea:` line (shown in the two-column style Git uses for merges, because a stash commit has two parents).
-- `git stash apply <hash>` puts the change back. (Dropping a stash also prints its hash, so scrolling up in your terminal works too.)
+- `git stash apply <hash>` puts the change back. (In your own work, `git stash drop` prints the hash it dropped, so scrolling up in your terminal works too.)
 
 ## Room 5 - The bad merge, already pushed
 
@@ -32,7 +32,7 @@ Show one with `bash lab hint escape-room <room>`.
 - `git revert` makes a new commit that undoes another one, without rewriting history.
 - Reverting a merge needs `-m 1`: "keep the first parent's side (main) and undo what the other side brought in".
 - `git revert -m 1 <merge-hash>`, then `bash test.sh`, then `git push`.
-- Later, merging `tax-change` again won't bring the changes back: Git thinks they're already merged. You'd revert the revert.
+- Later, merging those commits again (`git merge <merge>^2`) won't bring the changes back: Git thinks they're already merged. You'd revert the revert.
 
 ## Room 6 - Wrong branch
 

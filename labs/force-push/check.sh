@@ -12,10 +12,10 @@ own_commits_kept() {
   bb log --format=%s main..receipt-totals | grep -qx "Add the total line"
 }
 
-in_sync() { [ "$(git -C me rev-parse receipt-totals)" = "$(bb rev-parse receipt-totals)" ]; }
+in_sync() { on_latest_main && [ "$(git -C me rev-parse receipt-totals)" = "$(bb rev-parse receipt-totals)" ]; }
 
 main_untouched() {
-  [ "$(bb log -1 --format=%s main)" = "Thank customers in the README" ] && [ "$(bb rev-list --count main)" -eq 2 ]
+  on_latest_main && [ "$(bb log -1 --format=%s main)" = "Thank customers in the README" ] && [ "$(bb rev-list --count main)" -eq 2 ]
 }
 
 idle() { [ ! -d me/.git/rebase-merge ] && [ ! -d me/.git/rebase-apply ] && [ ! -f me/.git/MERGE_HEAD ]; }

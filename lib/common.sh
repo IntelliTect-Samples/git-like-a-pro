@@ -332,3 +332,18 @@ open_workspace() { # open_workspace <name>
   dir="$(workspace_dir "$1")"
   if command -v code >/dev/null 2>&1; then code "$dir"; else echo "VS Code's 'code' command isn't available. Folder: $(native_path "$dir")"; fi
 }
+
+# WSL (Linux inside Windows) running a kit that lives on a Windows drive: in PowerShell "bash" is WSL's bash
+# where it's installed, which runs WSL's own (often older) Git and builds repos in the Linux home folder.
+# LAB_TEST_WSL=1 lets the tests take this path.
+wsl_on_windows_kit() {
+  if [ "${LAB_TEST_WSL:-}" = 1 ]; then return 0; fi
+  grep -qi microsoft /proc/version 2>/dev/null || return 1
+  case "$KIT" in /mnt/[a-z]/*) return 0 ;; esac
+  return 1
+}
+
+wsl_advice() {
+  echo "You're running the kit in WSL (Linux) against a Windows folder, probably by typing bash in PowerShell."
+  echo "           Use Git for Windows instead: in PowerShell run .\\lab.cmd, or open Git Bash and run bash lab there."
+}

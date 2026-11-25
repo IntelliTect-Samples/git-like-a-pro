@@ -4,9 +4,9 @@ culprit() { sed -n 's/^culprit=//p' .git/lab-bisect; }
 
 tag_on_culprit() { [ "$(git rev-parse -q --verify 'first-bad^{commit}' 2>/dev/null)" = "$(culprit)" ]; }
 
-bisect_finished() { [ ! -f .git/BISECT_LOG ] && [ ! -f .git/BISECT_START ]; }
+bisect_finished() { tag_on_culprit && [ ! -f .git/BISECT_LOG ] && [ ! -f .git/BISECT_START ]; }
 
-on_main() { [ "$(git symbolic-ref -q --short HEAD)" = main ]; }
+on_main() { tag_on_culprit && [ "$(git symbolic-ref -q --short HEAD)" = main ]; }
 
 history_kept() { git merge-base --is-ancestor "$(culprit)" main && main_passes; }
 

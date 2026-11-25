@@ -12,7 +12,7 @@ Show one with `bash lab hint force-push <step>`.
 
 - "stale info" means: the server's branch is no longer where your `origin/receipt-totals` says it is. Someone pushed. Good: nothing was overwritten.
 - Pushed with a plain `--force-with-lease` after `git fetch` and Alex's commit is gone? It's still in `../alex`: look first (`git -C ../alex lg --all`), then rebuild with `bash lab force-push --step 2` and try again (rebuilding recreates `alex/` too).
-- `git pull --rebase` fetches, then replays your amended commit on top of Alex's commit. Alex's commit (`receipt.txt`) is now underneath and your earlier commits are already on the server, so only your amended commit is replayed, and it now holds just the README note.
+- `git pull --rebase` fetches, then replays your amended commit on top of Alex's commit. Alex's commit (`receipt.txt`) is now underneath and your earlier commits are already on the server, so only your amended commit is replayed, and it now holds just the README note (its `receipt-notes.txt` part is already on the server, so Git drops it; `git show --stat` before the pull still shows both files).
 - After the pull, your branch contains everything on the server, so a plain `git push` is a fast-forward.
 
 ## Step 3 - main is protected

@@ -6,7 +6,7 @@ Show one with `bash lab hint reviewable <step>`.
 
 - In the todo list, the top line is the oldest commit. Keep `pick` on the first commit of each group and change the others to `fixup` (or `f`), which keeps the code and throws away the message.
 - Lines can be moved: put `fix test` right under `apply discount` so it joins that commit.
-- `debug` and `remove debug` cancel out: change both to `drop` (or `d`). Drop only one and the rebase stops on the other (as an empty commit or a conflict): `git rebase --abort`, then drop both.
+- `debug` and `remove debug` cancel out: change both to `drop` (or `d`). Drop only `debug` and the rebase stops on `remove debug` as an empty commit; drop only `remove debug` and the debug line stays in your history. Either way: `git rebase --abort` (or `git reset --hard ORIG_HEAD` once it's finished), then drop both.
 - The three groups, oldest first: `wip discounts` + `more codes + tests` + `fix typo`; then `apply discount` + `fix test`; then `receipt and docs` + `wip` + `typo`.
 - To fix messages, use `reword` (or `r`) instead of `pick`, or run `git commit --amend` afterwards for the last one.
 - Something went wrong? `git rebase --abort` puts everything back. After a finished rebase, `git reset --hard ORIG_HEAD` does.
