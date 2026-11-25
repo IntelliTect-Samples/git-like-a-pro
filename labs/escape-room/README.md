@@ -16,6 +16,8 @@ This builds all six rooms as folders `room-1` to `room-6`. `cd` into the one you
 - See which rooms you've escaped (from the kit folder): `bash lab escape-room --check`
 - Need a nudge? `bash lab hint escape-room <room>`
 
+Short on time? Do rooms 1, 5 and 3 first: they're the ones that happen most on a team that rebases and shares branches.
+
 Your best friends in here: `git reflog`, `git lg --all`, `ORIG_HEAD`, and `git status`, which often tells you what to do next.
 
 ## Room 1 - Reset too far

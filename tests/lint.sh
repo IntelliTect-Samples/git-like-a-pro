@@ -2,10 +2,11 @@
 # Portability lint: bans constructs that break on macOS's bash 3.2 or BSD tools.
 # Also runs shellcheck when it's installed.
 set -u
-KIT="$(cd "$(dirname "$0")/.." && pwd)"
+unset CDPATH
+KIT="$(cd -P "$(dirname "$0")/.." && pwd)"
 cd "$KIT" || exit 2
 
-files="lab lib/common.sh lib/doctor.sh $(ls labs/*/*.sh try/*.sh tests/solutions/*.sh tests/run-all.sh 2>/dev/null)"
+files="lab lib/common.sh lib/doctor.sh $(ls labs/*/*.sh try/*.sh tests/solutions/*.sh tests/run-all.sh tests/build-try-readme.sh 2>/dev/null)"
 status=0
 
 # pattern%why

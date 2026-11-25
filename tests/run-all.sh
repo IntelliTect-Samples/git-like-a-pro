@@ -69,6 +69,7 @@ golden() { # golden <workspace>: "workspace/repo ref hash" lines, compared acros
   done
 }
 : > "$TMP_ROOT/refs.txt"
+SKIPPED_WS=""
 
 # ---------------------------------------------------------------- Try-its
 for f in "$KIT"/try/*.sh; do
@@ -76,13 +77,15 @@ for f in "$KIT"/try/*.sh; do
   if [ "$s" = playground ]; then cmd="play"; ws="playground"; else cmd="try $s"; ws="try-$s"; fi
   # shellcheck disable=SC2086
   expect_ok "try $s builds" "$BASH" "$LAB" $cmd
-  h1="$(git -C "$LAB_HOME/$ws" rev-parse HEAD 2>/dev/null)"
+  h1="$(ws_refs "$LAB_HOME/$ws")"
   # shellcheck disable=SC2086
   "$BASH" "$LAB" $cmd >/dev/null 2>&1
-  h2="$(git -C "$LAB_HOME/$ws" rev-parse HEAD 2>/dev/null)"
-  if [ -n "$h1" ] && [ "$h1" = "$h2" ]; then pass "try $s is deterministic ($h1)"; else fail "try $s rebuild changed HEAD ($h1 vs $h2)"; fi
-  if [ -z "$(git -C "$LAB_HOME/$ws" status --porcelain)" ]; then pass "try $s starts clean"; else fail "try $s has a dirty working tree"; fi
-  if git -C "$LAB_HOME/$ws" log --all --format= --name-only | grep -qx '.git-lab-workspace'; then fail "try $s committed .git-lab-workspace"; else pass "try $s never commits the kit's marker file"; fi
+  h2="$(ws_refs "$LAB_HOME/$ws")"
+  if [ -n "$(ws_repos "$LAB_HOME/$ws")" ] && [ "$h1" = "$h2" ]; then pass "try $s is deterministic"; else fail "try $s rebuild changed refs (or built no repo)"; fi
+  dirty_ok="$( . "$f"; echo "${TRY_DIRTY:-}" )"
+  if [ -n "$dirty_ok" ]; then pass "try $s starts with changes on purpose (TRY_DIRTY)"
+  elif [ -z "$(ws_dirty "$LAB_HOME/$ws")" ]; then pass "try $s starts clean"; else fail "try $s has a dirty working tree"; fi
+  if [ -n "$(ws_marker_commits "$LAB_HOME/$ws")" ]; then fail "try $s committed .git-lab-workspace"; else pass "try $s never commits the kit's marker file"; fi
   golden "$ws" >> "$TMP_ROOT/refs.txt"
 done
 
@@ -98,6 +101,13 @@ for labdir in "$KIT"/labs/*/; do
   [ -f "$d/setup.sh" ] || continue
   steps="$( . "$d/setup.sh"; echo "$LAB_STEPS" )"
   rooms="$( . "$d/setup.sh"; echo "${LAB_ROOMS:-}" )"
+  needs="$( . "$d/setup.sh"; echo "${LAB_NEEDS:-}" )"
+  if [ "$needs" = git-lfs ] && ! git lfs version >/dev/null 2>&1; then
+    echo "skip  lab $s needs git-lfs, which isn't installed"
+    expect_code 2 "lab $s says clearly that git-lfs is missing" "$BASH" "$LAB" "$s"
+    SKIPPED_WS="$SKIPPED_WS $s"
+    continue
+  fi
   expect_ok "lab $s builds" "$BASH" "$LAB" "$s"
   h1="$(ws_refs "$LAB_HOME/$s")"
   "$BASH" "$LAB" "$s" >/dev/null 2>&1
@@ -195,7 +205,9 @@ if [ "${UPDATE_GOLDEN:-}" = 1 ]; then
   sort "$TMP_ROOT/refs.txt" > "$KIT/tests/expected-refs.txt"; echo "wrote tests/expected-refs.txt"
 elif [ -f "$KIT/tests/expected-refs.txt" ]; then
   sort "$TMP_ROOT/refs.txt" > "$TMP_ROOT/refs.sorted"
-  if diff "$KIT/tests/expected-refs.txt" "$TMP_ROOT/refs.sorted" >"$TMP_ROOT/out" 2>&1; then pass "commit hashes match tests/expected-refs.txt"
+  cp "$KIT/tests/expected-refs.txt" "$TMP_ROOT/expected"
+  for s in $SKIPPED_WS; do grep -v "^${s}[/ ]" "$TMP_ROOT/expected" > "$TMP_ROOT/expected.new"; mv "$TMP_ROOT/expected.new" "$TMP_ROOT/expected"; done
+  if diff "$TMP_ROOT/expected" "$TMP_ROOT/refs.sorted" >"$TMP_ROOT/out" 2>&1; then pass "commit hashes match tests/expected-refs.txt"
   else fail "commit hashes differ from tests/expected-refs.txt"; sed 's/^/      /' "$TMP_ROOT/out"; fi
 else
   echo "skip  no tests/expected-refs.txt (create it with UPDATE_GOLDEN=1)"
@@ -205,6 +217,7 @@ fi
 if git -C "$KIT" ls-files -s lab 2>/dev/null | grep -q '^100755'; then pass "lab is committed as executable"
 elif git -C "$KIT" ls-files --error-unmatch lab >/dev/null 2>&1; then fail "lab is not committed as executable (git update-index --chmod=+x lab)"
 else echo "skip  lab not committed yet"; fi
+expect_ok "try/README.md matches try/parts (bash tests/build-try-readme.sh)" "$BASH" "$KIT/tests/build-try-readme.sh" --check
 crlf="$(cd "$KIT" && grep -rlI "$(printf '\r')" lab lib labs try tests 2>/dev/null || true)"
 [ -z "$crlf" ] && pass "no CRLF in scripts" || fail "CRLF line endings in: $crlf"
 

@@ -232,6 +232,9 @@ build_lab() { # build_lab <slug> <step>
   case "$step" in ""|*[!0-9]*) die 1 "--step needs a number from 1 to $steps" ;; esac
   step=$((10#$step)) # "02" -> 2
   { [ "$step" -ge 1 ] && [ "$step" -le "$steps" ]; } || die 1 "$slug has steps 1 to $steps"
+  case " $( . "$setup"; echo "${LAB_NEEDS:-}" ) " in
+    *" git-lfs "*) git lfs version >/dev/null 2>&1 || die 2 "The $slug lab needs git-lfs. Install it (macOS: brew install git-lfs; Linux: your package manager), run: git lfs install, then try again." ;;
+  esac
   editor="$(user_editor)"
   reset_workspace "$slug"
   run_build "$slug" _build_lab_body "$setup" "$WS" "$step"

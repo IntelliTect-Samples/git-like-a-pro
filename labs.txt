@@ -7,7 +7,7 @@ try|detach-and-return|How Git really works|4|core|Detach HEAD, commit there, get
 try|folder-remote|How Git really works|4|core|Use a folder as a remote: push to it, clone from it
 try|same-blob|How Git really works|2|if-time|Two files with the same content share one blob
 try|tags|How Git really works|3|if-time|Lightweight vs. annotated tags
-try|tracking|How Git really works|3|if-time|main vs. origin/main after a teammate pushes
+try|tracking|How Git really works|3|core|main vs. origin/main after a teammate pushes
 try|config-origin|Set up like a pro|3|core|See which file each setting comes from
 try|ignore-rules|Set up like a pro|3|if-time|check-ignore -v and rm --cached
 try|pull-rebase|Merging vs. rebasing|4|core|pull vs. pull --rebase on the same divergence
@@ -16,7 +16,7 @@ lab|conflicts|Merging vs. rebasing|25|core|Rebase, merge with --no-ff, and resol
 try|add-patch|Crafting clean history|4|core|add -p with split and edit
 try|stash-branch|Crafting clean history|3|if-time|stash -u and stash branch
 try|cherry-pick-hotfix|Crafting clean history|3|if-time|cherry-pick -x a hotfix onto a release branch
-lab|reviewable|Crafting clean history|35|core|Turn a messy branch into four clean, tested commits
+lab|reviewable|Crafting clean history|40|core|Turn a messy branch into four clean, tested commits
 try|reset-modes|Undo almost anything|4|core|reset --soft, --mixed and --hard on the same commit
 try|reflog-rescue|Undo almost anything|3|if-time|Get a deleted branch back from the reflog
 try|revert|Undo almost anything|2|if-time|Undo a pushed commit with revert
@@ -26,11 +26,12 @@ try|squash-merged|Rebase workflows with Bitbucket|2|if-time|Why branch -d refuse
 try|submodule-bump|Submodules|8|core|Clone with submodules, move one to a new version, commit the pointer
 try|submodule-trap|Submodules|3|if-time|Spot a detached HEAD inside a submodule
 try|history-search|Finding when and why things changed|5|core|log -S, and A..B vs. A...B
+try|rerere|Finding when and why things changed|5|core|Resolve a conflict once and let rerere replay it on the next rebase
 lab|bisect|Finding when and why things changed|15|core|Find the commit that broke the tests with bisect run
 try|blame-reformat|Finding when and why things changed|3|if-time|blame -w -C -C past a reformat
 try|worktree-hotfix|Parallel work and large repositories|5|core|A hotfix in a second worktree mid-feature
 try|sparse-checkout|Parallel work and large repositories|3|if-time|Check out only the folders you need
 try|commit-msg-hook|Automating with hooks|10|core|A shared commit-msg hook that requires a ticket key
-try|patch-series|History cleanup, strategies and structure|4|core|format-patch two commits, am them into another repo
+try|patch-series|History cleanup, strategies and structure|4|if-time|format-patch two commits, am them into another repo
 try|bundle|History cleanup, strategies and structure|4|if-time|Create, verify and fetch from a bundle
 lab|air-gap|History cleanup, strategies and structure|30|core|Carry a feature into an offline repo by patches and bundle

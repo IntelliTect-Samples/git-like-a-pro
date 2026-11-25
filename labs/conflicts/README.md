@@ -87,6 +87,7 @@ git lg
 - Rebuild (`bash lab conflicts`) and merge `loyalty` into `main` **without** rebasing first. Same conflicts, but you resolve them once, in the merge commit. Compare `git lg` with your rebased version.
 - During a rebase, `git checkout --ours <file>` takes **main's** version and `--theirs` takes **your** commit's version, the opposite of a merge. Rebuild and try both on `README.md` to see it.
 - `git log --merges --first-parent main` lists only the features merged into `main`.
+- `rebase --onto`: rebuild, then move only the *second* `loyalty` commit onto `main`, leaving the first behind: `git rebase --onto main loyalty~1 loyalty`. Read it as "take the commits after `loyalty~1`, up to `loyalty`, and replay them onto `main`".
 
 ## Debrief
 

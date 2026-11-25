@@ -1,6 +1,6 @@
 # Lab: Make it reviewable
 
-About 35 minutes. Section: Crafting clean history.
+About 40 minutes. Section: Crafting clean history.
 
 The `discounts` branch works, but its history is a mess: WIP commits, typo fixes, a debug line added and removed, a commit that mixes two changes, and commits where the tests fail. Before anyone reviews it (or carries it across as patches, one file per commit), turn it into four clean commits that each pass the tests.
 
