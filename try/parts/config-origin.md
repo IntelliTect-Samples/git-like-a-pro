@@ -10,7 +10,7 @@ bash lab try config-origin
    git config --list --show-scope --show-origin
    ```
 
-   `system` lines come from Git's install, `global` from your own `.gitconfig`, `local` from this repo's `.git/config`. When a setting appears more than once, the last one wins. On Windows, `core.autocrlf` often shows up twice: `true` from system, `false` from this repo.
+   `system` lines come from Git's install, `global` from your own `.gitconfig` and `local` from this repo's `.git/config`. When a setting appears more than once, the last one wins. On Windows you'll often see `core.autocrlf` twice, `true` from system and `false` from this repo.
 
 2. This repo sets its own email. See every value of `user.email`:
 
@@ -18,7 +18,7 @@ bash lab try config-origin
    git config --show-scope --show-origin --get-all user.email
    ```
 
-   Your global email (if you set one), then `local file:.git/config sam@work.example.com`.
+   You'll see your global email if you set one, then `local file:.git/config sam@work.example.com`.
 
 3. Ask for the value that wins, and who your next commit here would be by:
 
@@ -27,4 +27,4 @@ bash lab try config-origin
    git var GIT_AUTHOR_IDENT
    ```
 
-Extra: a `-c` on the command line beats every file. Try `git -c user.email=me@example.com config --show-scope user.email`.
+A `-c` on the command line beats every file. Try `git -c user.email=me@example.com config --show-scope user.email`.

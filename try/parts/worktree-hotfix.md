@@ -4,7 +4,7 @@
 bash lab try worktree-hotfix
 ```
 
-The repo is in `shop`. You're halfway through a change on `feature` when an urgent bug comes in: the tax rate on `main` is 80 instead of 8.
+The repo is in `shop`. You're halfway through a change on `feature` when an urgent bug comes in. The tax rate on `main` is 80 instead of 8.
 
 1. Look at your unfinished work:
 
@@ -13,7 +13,7 @@ The repo is in `shop`. You're halfway through a change on `feature` when an urge
    git status
    ```
 
-   `src/receipt.sh` is modified and not committed. No need to stash or commit it.
+   `src/receipt.sh` is modified and not committed. You don't need to stash or commit it.
 
 2. Make a second working folder for the hotfix, on a new branch from `main`:
 
@@ -29,7 +29,7 @@ The repo is in `shop`. You're halfway through a change on `feature` when an urge
    git commit -am "Fix the tax rate"
    ```
 
-4. Go back. Your change is untouched, and the hotfix commit is already in this repo (worktrees share one `.git`):
+4. Go back. Your change is untouched, and the hotfix commit is already in this repo because worktrees share one `.git`:
 
    ```
    cd ../shop
@@ -45,4 +45,4 @@ The repo is in `shop`. You're halfway through a change on `feature` when an urge
    git branch
    ```
 
-Extra: try `git worktree add ../again feature`. Git refuses: a branch can be checked out in only one worktree at a time.
+What happens if you try `git worktree add ../again feature`? Git refuses, because a branch can be checked out in only one worktree at a time.

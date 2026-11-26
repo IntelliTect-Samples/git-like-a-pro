@@ -13,15 +13,15 @@ The repo has a shared hook in `.githooks/commit-msg`, committed like any other f
    git ls-files -s .githooks
    ```
 
-   It's a plain `sh` script: Git passes it the message file, and a non-zero exit stops the commit. Mode `100755` means it was committed as executable, so it can run on macOS and Linux after a clone. (Git for Windows ignores that bit and runs any hook file that starts with `#!`.)
+   It's a plain `sh` script. Git passes it the message file, and a non-zero exit stops the commit. Mode `100755` means it was committed as executable, so it can run on macOS and Linux after a clone. Git for Windows ignores that bit and runs any hook file that starts with `#!`.
 
-2. Git doesn't run it yet. Hooks run only from the `core.hooksPath` folder (`.git/hooks` unless you change it), and cloning never turns hooks on for you. Point this repo at the shared folder:
+2. Git doesn't run it yet. Hooks run only from the `core.hooksPath` folder, which is `.git/hooks` unless you change it, and cloning never turns hooks on for you. Point this repo at the shared folder:
 
    ```
    git config core.hooksPath .githooks
    ```
 
-   `core.hooksPath` replaces the hooks folder, it doesn't add one: any hooks from your own global `core.hooksPath` stop running in this repo. (The kit already set this repo's `core.hooksPath` to `.git/hooks`, so your global hooks weren't running here before either.)
+   `core.hooksPath` replaces the hooks folder rather than adding one, so any hooks from your own global `core.hooksPath` stop running in this repo. The kit had already set this repo's `core.hooksPath` to `.git/hooks`, so your global hooks weren't running here before either.
 
 3. Commit without a ticket key:
 
@@ -46,6 +46,6 @@ The repo has a shared hook in `.githooks/commit-msg`, committed like any other f
    git log --oneline
    ```
 
-   `--no-verify` skips `commit-msg` (and `pre-commit`). So a hook is a convenience: a rule that must always hold also needs a check on the server.
+   `--no-verify` skips `commit-msg` and `pre-commit`. That makes a hook a convenience, not a guarantee. A rule that must always hold also needs a check on the server.
 
-Extra: make the hook also reject a message whose first line is longer than 72 characters, then test it. Your edit takes effect right away; no need to run `git config` again.
+Finished early? Make the hook also reject a message whose first line is longer than 72 characters, then test it. Your edit takes effect right away, so there's no need to run `git config` again.

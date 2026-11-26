@@ -4,7 +4,7 @@
 bash lab try submodule-bump
 ```
 
-Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, and `app.git`, which has `lib` as a submodule pinned to `v1.0`.
+There are two folder remotes. `lib.git` is a small library with versions `v1.0` and `v1.1`, and `app.git` has `lib` as a submodule pinned to `v1.0`.
 
 1. Clone the app and its submodule in one go:
 
@@ -12,7 +12,7 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    git -c protocol.file.allow=always clone --recurse-submodules app.git app
    ```
 
-   The `-c protocol.file.allow=always` is only needed because these remotes are local folders: Git blocks submodules from folders by default. You won't need it with Bitbucket.
+   You need `-c protocol.file.allow=always` here only because these remotes are local folders, and Git blocks submodules from folders by default. With Bitbucket you won't need it.
 
 2. See which `lib` commit the app uses, and the state inside the submodule:
 
@@ -24,7 +24,7 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
 
    The app records one exact commit (`v1.0`), so Git checks it out as a detached HEAD.
 
-3. Move `lib` to a new version: get on its `main` (that's `v1.1`) and add a fix of your own:
+3. Move `lib` to a new version. Get on its `main`, which is `v1.1`, and add a fix of your own:
 
    ```
    cd lib
@@ -34,9 +34,9 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    cd ..
    ```
 
-   On Windows you may see "LF will be replaced by CRLF": harmless, it's Git for Windows' line-ending setting.
+   On Windows you may see "LF will be replaced by CRLF". That comes from Git for Windows' line-ending setting and is harmless.
 
-4. The app sees the submodule moved. Commit the new pointer like any change:
+4. The app notices the submodule moved. Commit the new pointer like any other change:
 
    ```
    git status
@@ -45,7 +45,7 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    git commit -m "Use lib with round_dollars"
    ```
 
-   `status` says `modified: lib (new commits)`; the diff lists the lib commits you're about to point at.
+   `status` says `modified: lib (new commits)`, and the diff lists the lib commits you're about to point at.
 
 5. Try to push the app first:
 
@@ -53,7 +53,7 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    git push --recurse-submodules=check
    ```
 
-   Refused: your `lib` commit is on no remote yet, so anyone who pulled the app would get a pointer to a commit they can't fetch.
+   Git refuses. Your `lib` commit isn't on any remote yet, so anyone who pulled the app would get a pointer to a commit they can't fetch.
 
 6. Push in the right order, library first:
 
@@ -62,4 +62,4 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    git push
    ```
 
-Extra: make another `lib` change, commit the pointer, and push with `git push --recurse-submodules=on-demand`. Git pushes `lib` first, then the app. Check with a fresh clone: `git -c protocol.file.allow=always clone --recurse-submodules app.git check`.
+Extra: make another `lib` change, commit the pointer, and push with `git push --recurse-submodules=on-demand`. Git pushes `lib` first, then the app. To confirm, make a fresh clone with `git -c protocol.file.allow=always clone --recurse-submodules app.git check`.

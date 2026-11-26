@@ -14,7 +14,7 @@ bash lab try patch-series
    git format-patch main..feature -o ../patches
    ```
 
-   One file per commit, numbered in order. Open one: it's an email with the author, date, message and diff.
+   You get one file per commit, numbered in order. Open one and you'll see it's an email with the author, date, message and diff.
 
 2. Apply them in the other repo:
 
@@ -30,7 +30,7 @@ bash lab try patch-series
    git -C ../shop log --oneline -3 feature
    ```
 
-   Same messages, same changes, different hashes for the two new commits.
+   Same messages and same changes, but the two new commits have different hashes.
 
 4. See why:
 
@@ -38,6 +38,6 @@ bash lab try patch-series
    git log --format=fuller -1
    ```
 
-   The author and author date came from the patch. The committer is you, and the commit date is now, so the commit object is different and so is its hash.
+   The author and author date came from the patch. The committer is you and the commit date is now, so the commit object differs and so does its hash.
 
-Extra: from `offline`, run `git show HEAD | git patch-id` and `git -C ../shop show feature | git patch-id`. The first column (the patch ID) matches, the second (the commit) doesn't: `patch-id` hashes only the change, so it spots the same change even when the hashes differ. Rebase and `git cherry` use it to skip changes that are already there.
+To go further, run `git show HEAD | git patch-id` from `offline`, then `git -C ../shop show feature | git patch-id`. The first column, the patch ID, matches. The second, the commit, doesn't. `patch-id` hashes only the change, so it spots the same change even when the hashes differ. Rebase and `git cherry` use it to skip changes that are already there.

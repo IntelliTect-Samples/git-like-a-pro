@@ -10,7 +10,7 @@ bash lab try ignore-rules
    git status --ignored
    ```
 
-   `build/` and `server.log` (and `.git-lab-workspace`, the kit's marker file).
+   You'll see `build/` and `server.log`, plus `.git-lab-workspace`, the kit's marker file.
 
 2. Ask which rule ignores each one:
 
@@ -18,7 +18,7 @@ bash lab try ignore-rules
    git check-ignore -v server.log build/app.js
    ```
 
-   Each line is `file:line:pattern`, then the path: `server.log` is ignored by line 2 of `.gitignore`, `*.log`.
+   Each line gives `file:line:pattern` and then the path. So `server.log` is ignored by line 2 of `.gitignore`, which is `*.log`.
 
 3. `debug.log` matches `*.log` too, but Git still tracks it, because it was committed before the rule. Ask about it:
 
@@ -26,7 +26,7 @@ bash lab try ignore-rules
    git check-ignore -v debug.log
    ```
 
-   No output: ignore rules never apply to tracked files.
+   No output. Ignore rules never apply to tracked files.
 
 4. Stop tracking it, but keep the file on disk:
 
@@ -36,6 +36,6 @@ bash lab try ignore-rules
    git check-ignore -v debug.log
    ```
 
-Look for: `debug.log` is still in the folder, `git status` is clean, and step 3's command now names the `*.log` rule.
+Afterwards `debug.log` is still in the folder, `git status` is clean, and the command from step 3 now names the `*.log` rule.
 
-Extra: `keep.log` matches `*.log` but is committed on purpose. `git check-ignore -v --no-index keep.log` checks it as if it weren't tracked: which rule wins? Then try `git check-ignore -v .git-lab-workspace`: rules can live outside `.gitignore` too.
+Extra: `keep.log` matches `*.log` but was committed on purpose. `git check-ignore -v --no-index keep.log` checks it as if it weren't tracked. Which rule wins? Then try `git check-ignore -v .git-lab-workspace` to see that rules can live outside `.gitignore` too.

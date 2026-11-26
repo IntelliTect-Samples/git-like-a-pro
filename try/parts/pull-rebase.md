@@ -4,7 +4,7 @@
 bash lab try pull-rebase
 ```
 
-The folder holds the shared remote `origin.git` and your clone `me`. A teammate has pushed a commit you haven't fetched, and you have one commit you haven't pushed. Work from `me`: `cd me`.
+The folder holds the shared remote `origin.git` and your clone `me`. A teammate has pushed a commit you haven't fetched, and you have one commit you haven't pushed. You'll work from `me`, so start with `cd me`.
 
 1. Pull with a merge:
 
@@ -13,7 +13,7 @@ The folder holds the shared remote `origin.git` and your clone `me`. A teammate 
    git lg --all
    ```
 
-   A merge commit, "Merge branch 'main' of ..." (then the practice folder's path), joins your commit and the teammate's.
+   You get a merge commit, "Merge branch 'main' of ..." followed by the practice folder's path, joining your commit and the teammate's.
 
 2. Undo that pull. `ORIG_HEAD` is where `main` was before it:
 
@@ -28,6 +28,6 @@ The folder holds the shared remote `origin.git` and your clone `me`. A teammate 
    git lg --all
    ```
 
-Look for: a straight line, with your "Print a receipt" on top of the teammate's "Add shipping cost". Same files as in step 1, no merge commit, but your commit has a new hash.
+Now the history is a straight line, with your "Print a receipt" on top of the teammate's "Add shipping cost". The files match step 1 and there's no merge commit, but your commit has a new hash.
 
-Extra: which one do you get from a plain `git pull`? `git config --show-origin pull.rebase` tells you (this repo sets it to `false`).
+Which one does a plain `git pull` give you? `git config --show-origin pull.rebase` will tell you. This repo sets it to `false`.
