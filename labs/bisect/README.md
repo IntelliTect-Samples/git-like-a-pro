@@ -68,7 +68,7 @@ bash test.sh
 - `git bisect log` (during a bisect) shows your answers so far; `git bisect replay` can redo them.
 - What if some commits can't be tested (they don't build)? Your test script exits 125 for those and `bisect run` skips them. Or mark one by hand: `git bisect skip`.
 - Bisecting something that isn't a bug? `git bisect start --term-old=slow --term-new=fast` lets you use your own words.
-- Faster still: on `main`, `git log -S "+ 50" --oneline -- src/price.sh` finds when that text disappeared. Bisect is for when you don't know which line to look for.
+- Faster still: on `main`, `git log -S "+ 50" --oneline -- src/price.sh` finds when that text disappeared (after step 2 it also lists your revert, which put it back). Bisect is for when you don't know which line to look for.
 
 ## Debrief
 

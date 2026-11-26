@@ -83,7 +83,7 @@ Submodule commands here have `-c protocol.file.allow=always`: Git blocks submodu
    git -C units.git bundle create ../usb/units.bundle v1.0..main v1.1
    ```
 
-3. Inside: fetch the branch and the tag from the bundle into the inside's copy of the library, then update again.
+3. Inside: fetch the branch and the tag from the bundle into the inside's copy of the library, then update again. `git -C <folder>` runs one command as if you were in that folder. `main:main` and `refs/tags/v1.1:refs/tags/v1.1` say "take this ref from the bundle and store it under that name here".
 
    ```
    git -C inside-units.git fetch ../usb/units.bundle main:main refs/tags/v1.1:refs/tags/v1.1
@@ -110,7 +110,7 @@ git -C ../outside rev-parse rates
 
 ## Stretch
 
-- The next trip, with an incremental bundle. Outside, mark what you just sent with `git tag sent-1 rates`, add a commit to `rates`, then bundle only the new part: `git bundle create ../usb/rates-2.bundle sent-1..rates`. Inside, `git bundle verify ../usb/rates-2.bundle` checks that the commit it builds on is already there (it is: `rates-bundle`), then `git fetch ../usb/rates-2.bundle rates:rates-bundle`.
+- The next trip, with an incremental bundle. Outside, mark what you just sent with `git tag last-sent rates`, add a commit to `rates`, then bundle only the new part: `git bundle create ../usb/rates-2.bundle last-sent..rates` (afterwards, `git tag -f last-sent rates` moves the mark for the next trip). Inside, `git bundle verify ../usb/rates-2.bundle` checks that the commit it builds on is already there (it is: `rates-bundle`), then `git fetch ../usb/rates-2.bundle rates:rates-bundle`.
 - A bare repo on the stick is a third way: `git init --bare -b main ../usb/shop.git`, then outside `git remote add usb ../usb/shop.git` and `git push usb rates`, and inside fetch from it. Use a named remote: pushing straight to the folder path fails on the LFS file ("missing protocol"), while `git push usb` carries the LFS objects too. It still doesn't carry the library.
 - Which would your reviewers rather read: patches or a bundle? Which keeps `git log` the same on both sides?
 - `git am` keeps the author and the author date, but the committer is whoever applied it. Check with `git log --format=fuller -1 rates`.

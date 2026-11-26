@@ -34,6 +34,8 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    cd ..
    ```
 
+   On Windows you may see "LF will be replaced by CRLF": harmless, it's Git for Windows' line-ending setting.
+
 4. The app sees the submodule moved. Commit the new pointer like any change:
 
    ```

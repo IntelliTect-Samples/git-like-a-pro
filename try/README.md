@@ -124,7 +124,7 @@ The folder holds one repo, `project`. Work from inside it: `cd project`.
 
 Look for: the same commit hashes as in `project`, and `origin/main`. `git remote -v` shows that `origin` is just a folder path.
 
-Extra: commit something in `copy` and `git push`, then `cd ../project` and `git pull usb main`. Why `-b main` in step 1? Leave it out and the clone may warn "remote HEAD refers to nonexistent ref": the bare repo's HEAD names your default branch, often `master`.
+Extra: commit something in `copy` and `git push`, then `cd ../project` and `git pull usb main`. Why `-b main` in step 1? Leave it out and the clone may warn "remote HEAD refers to nonexistent ref": the bare repo's HEAD names your default branch, often `master`. On Windows, a commit in `copy` may print "LF will be replaced by CRLF": harmless, it's Git for Windows' line-ending setting.
 
 ### same-blob (2 min, if time)
 
@@ -707,6 +707,8 @@ Two folder remotes: `lib.git`, a small library with versions `v1.0` and `v1.1`, 
    git commit -am "Add round_dollars"
    cd ..
    ```
+
+   On Windows you may see "LF will be replaced by CRLF": harmless, it's Git for Windows' line-ending setting.
 
 4. The app sees the submodule moved. Commit the new pointer like any change:
 
